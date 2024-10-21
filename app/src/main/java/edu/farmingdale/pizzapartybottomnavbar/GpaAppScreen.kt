@@ -30,33 +30,40 @@ fun GpaAppScreen() {
 
     // Declare variables for GPA result and background color
     var gpa by remember { mutableStateOf("") }
-    var backColor by remember { mutableStateOf(Color.White) }
+    var backColor by remember { mutableStateOf(Color.Cyan) }
     var btnLabel by remember { mutableStateOf("Calulate GPA") }
 
     Column(
         modifier = Modifier
-        ,verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally
+            .fillMaxSize()
+            .background(backColor)
+            .padding(16.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
         TextField(
             value = grade1,
-            onValueChange = { grade1 = it },Modifier.padding(16.dp),
-            label = { Text("Course 1 Grade")}
+            onValueChange = { grade1 = it },Modifier.padding(8.dp),
+            label = { Text("Course 1 Grade")},
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
         )
 
 
         TextField(
             value = grade2,
-            onValueChange = { grade2 = it },
+            onValueChange = { grade2 = it },Modifier.padding(8.dp),
             label = { Text("Course 2 Grade") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
         )
 
 
 
         TextField(
             value = grade3,
-            onValueChange = { grade3 = it },
+            onValueChange = { grade3 = it },Modifier.padding(8.dp),
             label = { Text("Course 3 Grade") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
         )
 
 
@@ -97,7 +104,20 @@ fun GpaAppScreen() {
 
 
     }
+    Button(
+        onClick = {
+            grade1 = ""
+            grade2 = ""
+            grade3 = ""
+            gpa = ""
+            backColor = Color.Cyan
+        },
+        modifier = Modifier.padding(top = 16.dp)
+    ) {
+        Text("Clear Fields")
+    }
 }
+
 
 
 fun calGPA(grade1: String, grade2: String, grade3: String): Double {
