@@ -4,11 +4,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
-import androidx.compose.material3.RadioButton
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
+import androidx.compose.material3.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.input.KeyboardType
@@ -17,36 +17,58 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import edu.farmingdale.pizzapartybottomnavbar.HungerLevel
 import edu.farmingdale.pizzapartybottomnavbar.PizzaPartyViewModel
+import kotlinx.coroutines.launch
 
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PizzaPartyScreen(
+    drawerState: DrawerState, // DrawerState passed to control the drawer
     modifier: Modifier = Modifier,
     partyViewModel: PizzaPartyViewModel = viewModel()
 ) {
-    Column(
-        modifier = modifier.padding(10.dp)
-    ) {
-        AppTitle(modifier)
-        PartySize(
-            numPeopleInput = partyViewModel.numPeopleInput,
-            onValueChange = { partyViewModel.numPeopleInput = it },
-            modifier = modifier
-        )
-        HungerLevelSelection(
-            hungerLevel = partyViewModel.hungerLevel,
-            onSelected = { partyViewModel.hungerLevel = it },
-            modifier = modifier
-        )
-        TotalPizzas(
-            totalPizzas = partyViewModel.totalPizzas,
-            modifier = modifier
-        )
-        CalculateButton(
-            onClick = { partyViewModel.calculateNumPizzas() },
-            modifier = modifier
-        )
-    }
+    val coroutineScope = rememberCoroutineScope()
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Pizza Party") },
+                navigationIcon = {
+                    IconButton(onClick = {
+                        coroutineScope.launch {
+                            drawerState.open() // Open the drawer when the menu icon is clicked
+                        }
+                    }) {
+                        Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
+                    }
+                }
+            )
+        },
+        content = { innerPadding ->
+            Column(
+                modifier = modifier.padding(innerPadding).padding(10.dp)
+            ) {
+                AppTitle(modifier)
+                PartySize(
+                    numPeopleInput = partyViewModel.numPeopleInput,
+                    onValueChange = { partyViewModel.numPeopleInput = it },
+                    modifier = modifier
+                )
+                HungerLevelSelection(
+                    hungerLevel = partyViewModel.hungerLevel,
+                    onSelected = { partyViewModel.hungerLevel = it },
+                    modifier = modifier
+                )
+                TotalPizzas(
+                    totalPizzas = partyViewModel.totalPizzas,
+                    modifier = modifier
+                )
+                CalculateButton(
+                    onClick = { partyViewModel.calculateNumPizzas() },
+                    modifier = modifier
+                )
+            }
+        }
+    )
 }
 
 @Composable

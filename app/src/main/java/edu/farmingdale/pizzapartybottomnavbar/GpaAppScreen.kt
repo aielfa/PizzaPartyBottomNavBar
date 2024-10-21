@@ -31,7 +31,7 @@ fun GpaAppScreen() {
     // Declare variables for GPA result and background color
     var gpa by remember { mutableStateOf("") }
     var backColor by remember { mutableStateOf(Color.Cyan) }
-    var btnLabel by remember { mutableStateOf("Calulate GPA") }
+    var btnLabel by remember { mutableStateOf("Compute GPA") }
 
     Column(
         modifier = Modifier
@@ -71,19 +71,15 @@ fun GpaAppScreen() {
             if (btnLabel == "Compute GPA") {
 
                 val gpaVal = calGPA(grade1, grade2, grade3)
-                if (gpaVal != null) {
-                    gpa = gpaVal.toString()
+                gpa = gpaVal.toString()
 
-                    // Change background color based on GPA
-                    backColor = when {
-                        gpaVal < 60 -> Color.Red
-                        gpaVal in 60.0..79.0 -> Color.Yellow
-                        else -> Color.Green
-                    }
-                    btnLabel = "Clear"
-                } else {
-                    gpa = "Invalid input"
+                // Change background color based on GPA
+                backColor = when {
+                    gpaVal < 60 -> Color.Red
+                    gpaVal in 60.0..79.0 -> Color.Yellow
+                    else -> Color.Green
                 }
+                btnLabel = "Clear"
             } else {
                 // Reset all value to none
                 grade1 = ""
